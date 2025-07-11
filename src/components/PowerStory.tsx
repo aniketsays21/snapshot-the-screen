@@ -22,9 +22,10 @@ interface Book {
 interface PowerStoryProps {
   book: Book;
   onClose: () => void;
+  onAddToPlan: (data: { book: string; author: string; chapter?: string }) => void;
 }
 
-export const PowerStory = ({ book, onClose }: PowerStoryProps) => {
+export const PowerStory = ({ book, onClose, onAddToPlan }: PowerStoryProps) => {
   const [currentChapter, setCurrentChapter] = useState(0);
   const [progress, setProgress] = useState(0);
 
@@ -115,6 +116,11 @@ export const PowerStory = ({ book, onClose }: PowerStoryProps) => {
             variant="secondary"
             size="sm"
             className="flex-1 bg-white/20 text-white border-white/20 hover:bg-white/30"
+            onClick={() => onAddToPlan({ 
+              book: book.title, 
+              author: book.author, 
+              chapter: chapter.title 
+            })}
           >
             <Plus className="w-4 h-4 mr-2" />
             Add to Plan
