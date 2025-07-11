@@ -5,6 +5,8 @@ import { Badge } from "@/components/ui/badge";
 import { PowerStory } from "@/components/PowerStory";
 import { StoryPreview } from "@/components/StoryPreview";
 import { AuthorChat } from "@/components/AuthorChat";
+import { ActionPlanCreator } from "@/components/ActionPlanCreator";
+import { cn } from "@/lib/utils";
 import jamesClearImg from "@/assets/james-clear.jpg";
 import breneBrownImg from "@/assets/brene-brown.jpg";
 import timFerrissImg from "@/assets/tim-ferriss.jpg";
@@ -13,6 +15,39 @@ import carolDweckImg from "@/assets/carol-dweck.jpg";
 const Index = () => {
   const [selectedStory, setSelectedStory] = useState<any>(null);
   const [selectedAuthor, setSelectedAuthor] = useState<any>(null);
+  const [showActionPlanCreator, setShowActionPlanCreator] = useState(false);
+  const [actionPlans, setActionPlans] = useState([
+    {
+      id: "1",
+      title: "Daily 2-Minute Rule",
+      book: "Atomic Habits",
+      author: "James Clear",
+      status: "In Progress",
+      streak: 7,
+      schedule: { frequency: "daily", duration: "15-min" },
+      goals: { streakTarget: 30, expertiseWeeks: 8 }
+    },
+    {
+      id: "2", 
+      title: "Morning Vulnerability Practice",
+      book: "Daring Greatly",
+      author: "Brené Brown",
+      status: "Scheduled",
+      streak: 3,
+      schedule: { frequency: "daily", duration: "30-min" },
+      goals: { streakTarget: 21, expertiseWeeks: 6 }
+    },
+    {
+      id: "3",
+      title: "Weekly 80/20 Review", 
+      book: "4-Hour Workweek",
+      author: "Tim Ferriss",
+      status: "Draft",
+      streak: 0,
+      schedule: { frequency: "weekly", duration: "1-hour" },
+      goals: { streakTarget: 12, expertiseWeeks: 12 }
+    }
+  ]);
 
   const books = [
     {
@@ -198,53 +233,56 @@ const Index = () => {
         <div className="py-6">
           <div className="flex items-center justify-between mb-4">
             <h2 className="text-lg font-semibold text-foreground">Action Plans</h2>
-            <Button variant="ghost" size="sm" className="text-primary">
+            <Button 
+              variant="ghost" 
+              size="sm" 
+              className="text-primary"
+              onClick={() => setShowActionPlanCreator(true)}
+            >
               + New Plan
             </Button>
           </div>
 
           <div className="space-y-4">
-            <div className="bg-card rounded-lg p-4 border">
-              <div className="flex items-start justify-between mb-2">
-                <h3 className="font-medium text-sm text-foreground">Daily 2-Minute Rule</h3>
-                <Lock className="w-4 h-4 text-muted-foreground" />
+            {actionPlans.map((plan) => (
+              <div key={plan.id} className="bg-card rounded-lg p-4 border">
+                <div className="flex items-start justify-between mb-2">
+                  <h3 className="font-medium text-sm text-foreground">{plan.title}</h3>
+                  <div className="flex items-center gap-2">
+                    {plan.streak > 0 && (
+                      <div className="flex items-center gap-1">
+                        <div className="w-2 h-2 bg-orange-500 rounded-full"></div>
+                        <span className="text-xs font-medium text-orange-600">{plan.streak}</span>
+                      </div>
+                    )}
+                    <Lock className="w-4 h-4 text-muted-foreground" />
+                  </div>
+                </div>
+                <p className="text-xs text-muted-foreground mb-3">
+                  From: {plan.book} • {plan.author}
+                </p>
+                <div className="flex items-center justify-between mb-2">
+                  <Badge 
+                    className={cn(
+                      "border-0",
+                      plan.status === "In Progress" && "bg-blue-100 text-blue-700",
+                      plan.status === "Scheduled" && "bg-green-100 text-green-700", 
+                      plan.status === "Draft" && "bg-gray-100 text-gray-700"
+                    )}
+                  >
+                    {plan.status}
+                  </Badge>
+                  <Button variant="ghost" size="sm" className="text-primary text-xs">
+                    {plan.status === "Draft" ? "Set Schedule" : "Edit Schedule"}
+                  </Button>
+                </div>
+                {plan.streak > 0 && (
+                  <div className="text-xs text-muted-foreground">
+                    🔥 {plan.streak} day streak • {plan.goals.streakTarget - plan.streak} days to goal
+                  </div>
+                )}
               </div>
-              <p className="text-xs text-muted-foreground mb-3">From: Atomic Habits • James Clear</p>
-              <div className="flex items-center justify-between">
-                <Badge className="bg-blue-100 text-blue-700 border-0">In Progress</Badge>
-                <Button variant="ghost" size="sm" className="text-primary text-xs">
-                  Set Schedule
-                </Button>
-              </div>
-            </div>
-
-            <div className="bg-card rounded-lg p-4 border">
-              <div className="flex items-start justify-between mb-2">
-                <h3 className="font-medium text-sm text-foreground">Morning Vulnerability Practice</h3>
-                <Lock className="w-4 h-4 text-muted-foreground" />
-              </div>
-              <p className="text-xs text-muted-foreground mb-3">From: Chat with Brené Brown</p>
-              <div className="flex items-center justify-between">
-                <Badge className="bg-green-100 text-green-700 border-0">Scheduled</Badge>
-                <Button variant="ghost" size="sm" className="text-primary text-xs">
-                  Edit Schedule
-                </Button>
-              </div>
-            </div>
-
-            <div className="bg-card rounded-lg p-4 border">
-              <div className="flex items-start justify-between mb-2">
-                <h3 className="font-medium text-sm text-foreground">Weekly 80/20 Review</h3>
-                <Lock className="w-4 h-4 text-muted-foreground" />
-              </div>
-              <p className="text-xs text-muted-foreground mb-3">From: 4-Hour Workweek • Tim Ferriss</p>
-              <div className="flex items-center justify-between">
-                <Badge className="bg-gray-100 text-gray-700 border-0">Draft</Badge>
-                <Button variant="ghost" size="sm" className="text-primary text-xs">
-                  Set Schedule
-                </Button>
-              </div>
-            </div>
+            ))}
           </div>
         </div>
 
@@ -355,6 +393,17 @@ const Index = () => {
         <AuthorChat
           author={selectedAuthor}
           onClose={() => setSelectedAuthor(null)}
+        />
+      )}
+
+      {/* Action Plan Creator */}
+      {showActionPlanCreator && (
+        <ActionPlanCreator
+          onClose={() => setShowActionPlanCreator(false)}
+          onCreatePlan={(plan) => {
+            setActionPlans([...actionPlans, plan]);
+            setShowActionPlanCreator(false);
+          }}
         />
       )}
     </div>
