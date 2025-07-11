@@ -17,9 +17,10 @@ interface ActionPlan {
 interface ActionPlansSectionProps {
   actionPlans: ActionPlan[];
   onNewPlan: () => void;
+  onSeeAll?: () => void;
 }
 
-export const ActionPlansSection = ({ actionPlans, onNewPlan }: ActionPlansSectionProps) => {
+export const ActionPlansSection = ({ actionPlans, onNewPlan, onSeeAll }: ActionPlansSectionProps) => {
   return (
     <div className="py-6">
       <div className="flex items-center justify-between mb-4">
@@ -35,7 +36,7 @@ export const ActionPlansSection = ({ actionPlans, onNewPlan }: ActionPlansSectio
       </div>
 
       <div className="space-y-4">
-        {actionPlans.map((plan) => (
+        {actionPlans.slice(0, 3).map((plan) => (
           <div key={plan.id} className="bg-card rounded-lg p-4 border">
             <div className="flex items-start justify-between mb-2">
               <h3 className="font-medium text-sm text-foreground">{plan.title}</h3>
@@ -74,6 +75,19 @@ export const ActionPlansSection = ({ actionPlans, onNewPlan }: ActionPlansSectio
             )}
           </div>
         ))}
+        
+        {onSeeAll && actionPlans.length > 3 && (
+          <div className="pt-2">
+            <Button 
+              variant="ghost" 
+              size="sm" 
+              className="w-full text-primary"
+              onClick={onSeeAll}
+            >
+              See all {actionPlans.length} plans
+            </Button>
+          </div>
+        )}
       </div>
     </div>
   );

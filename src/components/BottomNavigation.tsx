@@ -1,6 +1,10 @@
 import { Home, Zap, Users, ClipboardList, Bookmark } from "lucide-react";
 
-export const BottomNavigation = () => {
+interface BottomNavigationProps {
+  onNavigateToPlans: () => void;
+}
+
+export const BottomNavigation = ({ onNavigateToPlans }: BottomNavigationProps) => {
   return (
     <div className="fixed bottom-0 left-1/2 -translate-x-1/2 w-full max-w-md bg-white border-t px-4 py-3">
       <div className="flex items-center justify-around">
@@ -16,7 +20,7 @@ export const BottomNavigation = () => {
           <Users className="w-6 h-6 text-muted-foreground" />
           <span className="text-xs text-muted-foreground">Authors</span>
         </div>
-        <div className="flex flex-col items-center gap-1">
+        <div className="flex flex-col items-center gap-1 cursor-pointer" onClick={onNavigateToPlans}>
           <ClipboardList className="w-6 h-6 text-muted-foreground" />
           <span className="text-xs text-muted-foreground">Plans</span>
         </div>

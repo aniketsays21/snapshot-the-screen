@@ -18,25 +18,10 @@ import carolDweckImg from "@/assets/carol-dweck.jpg";
 interface ActionPlanCreatorProps {
   onClose: () => void;
   onCreatePlan: (plan: any) => void;
+  initialData?: { book?: string; author?: string; chapter?: string };
 }
 
-export const ActionPlanCreator = ({ onClose, onCreatePlan }: ActionPlanCreatorProps) => {
-  const [currentStep, setCurrentStep] = useState(1);
-  const [selectedBook, setSelectedBook] = useState<any>(null);
-  const [selectedChapter, setSelectedChapter] = useState<any>(null);
-  const [customTopic, setCustomTopic] = useState("");
-  const [schedule, setSchedule] = useState({
-    frequency: "",
-    duration: "",
-    startDate: undefined as Date | undefined,
-    reminderTime: ""
-  });
-  const [resources, setResources] = useState("");
-  const [goals, setGoals] = useState({
-    streakTarget: 30,
-    expertiseWeeks: 12
-  });
-
+export const ActionPlanCreator = ({ onClose, onCreatePlan, initialData }: ActionPlanCreatorProps) => {
   const books = [
     {
       id: "atomic-habits",
@@ -73,6 +58,26 @@ export const ActionPlanCreator = ({ onClose, onCreatePlan }: ActionPlanCreatorPr
       ]
     }
   ];
+
+  const [currentStep, setCurrentStep] = useState(1);
+  const [selectedBook, setSelectedBook] = useState<any>(
+    initialData?.book ? books.find(b => b.title === initialData.book) : null
+  );
+  const [selectedChapter, setSelectedChapter] = useState<any>(
+    initialData?.chapter ? { title: initialData.chapter } : null
+  );
+  const [customTopic, setCustomTopic] = useState("");
+  const [schedule, setSchedule] = useState({
+    frequency: "",
+    duration: "",
+    startDate: undefined as Date | undefined,
+    reminderTime: ""
+  });
+  const [resources, setResources] = useState("");
+  const [goals, setGoals] = useState({
+    streakTarget: 30,
+    expertiseWeeks: 12
+  });
 
   const handleNext = () => {
     if (currentStep < 5) setCurrentStep(currentStep + 1);

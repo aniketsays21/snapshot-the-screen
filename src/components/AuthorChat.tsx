@@ -17,6 +17,7 @@ interface Author {
 interface AuthorChatProps {
   author: Author;
   onClose: () => void;
+  onAddToPlan: (data: { author: string; book: string }) => void;
 }
 
 interface Message {
@@ -26,7 +27,7 @@ interface Message {
   timestamp: Date;
 }
 
-export const AuthorChat = ({ author, onClose }: AuthorChatProps) => {
+export const AuthorChat = ({ author, onClose, onAddToPlan }: AuthorChatProps) => {
   const [messages, setMessages] = useState<Message[]>([
     {
       id: "1",
@@ -92,9 +93,9 @@ export const AuthorChat = ({ author, onClose }: AuthorChatProps) => {
   };
 
   const saveToActionPlan = () => {
-    toast({
-      title: "Saved to Action Plan",
-      description: "Chat conversation added to your action plans.",
+    onAddToPlan({ 
+      author: author.name, 
+      book: author.book 
     });
   };
 
