@@ -180,6 +180,30 @@ export const AuthorChat = ({ author, onClose, onAddToPlan }: AuthorChatProps) =>
                 </p>
               </div>
             </div>
+            
+            {/* Action Buttons for Author Messages */}
+            {message.isAuthor && (
+              <div className="flex gap-2 ml-10 mt-2">
+                <Button 
+                  onClick={saveToActionPlan}
+                  variant="outline" 
+                  size="sm"
+                  className="hover-scale border-blue-500 text-blue-600 hover:bg-blue-50"
+                >
+                  <Plus className="w-3 h-3 mr-1" />
+                  Add to Action Plan
+                </Button>
+                <Button 
+                  onClick={saveToShelf}
+                  variant="outline" 
+                  size="sm"
+                  className="hover-scale border-gray-300 text-gray-600 hover:bg-gray-50"
+                >
+                  <Bookmark className="w-3 h-3 mr-1" />
+                  Add to Shelf
+                </Button>
+              </div>
+            )}
           </div>
         ))}
       </div>
@@ -206,27 +230,6 @@ export const AuthorChat = ({ author, onClose, onAddToPlan }: AuthorChatProps) =>
         </div>
       </div>
 
-      {/* Action Buttons */}
-      <div className="px-4 pb-4 bg-white border-t">
-        <div className="flex gap-3">
-          <Button 
-            onClick={saveToActionPlan}
-            variant="outline" 
-            className="flex-1 hover-scale border-blue-500 text-blue-600 hover:bg-blue-50"
-          >
-            <Plus className="w-4 h-4 mr-2" />
-            Add to Action Plan
-          </Button>
-          <Button 
-            onClick={saveToShelf}
-            variant="outline" 
-            className="flex-1 hover-scale border-gray-300 text-gray-600 hover:bg-gray-50"
-          >
-            <Bookmark className="w-4 h-4 mr-2" />
-            Add to Shelf
-          </Button>
-        </div>
-      </div>
     </div>
   );
 };
