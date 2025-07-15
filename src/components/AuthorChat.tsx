@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { ArrowLeft, MoreVertical, Send, Paperclip, Mic } from "lucide-react";
+import { ArrowLeft, MoreVertical, Send, Paperclip, Mic, Plus, Bookmark } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useToast } from "@/hooks/use-toast";
@@ -202,6 +202,28 @@ export const AuthorChat = ({ author, onClose, onAddToPlan }: AuthorChatProps) =>
           </Button>
           <Button onClick={sendMessage} size="sm" className="bg-blue-500 hover:bg-blue-600 text-white rounded-full">
             <Send className="w-4 h-4" />
+          </Button>
+        </div>
+      </div>
+
+      {/* Action Buttons */}
+      <div className="px-4 pb-4 bg-white border-t">
+        <div className="flex gap-3">
+          <Button 
+            onClick={saveToActionPlan}
+            variant="outline" 
+            className="flex-1 hover-scale border-blue-500 text-blue-600 hover:bg-blue-50"
+          >
+            <Plus className="w-4 h-4 mr-2" />
+            Add to Action Plan
+          </Button>
+          <Button 
+            onClick={saveToShelf}
+            variant="outline" 
+            className="flex-1 hover-scale border-gray-300 text-gray-600 hover:bg-gray-50"
+          >
+            <Bookmark className="w-4 h-4 mr-2" />
+            Add to Shelf
           </Button>
         </div>
       </div>
