@@ -68,6 +68,7 @@ const Index = ({ actionPlans, setActionPlans, onNavigateToPlans }: IndexProps) =
           onClose={() => setSelectedStory(null)}
           onAddToPlan={(data) => {
             setActionPlanData(data);
+            setSelectedStory(null);
             setShowActionPlanCreator(true);
           }}
         />
