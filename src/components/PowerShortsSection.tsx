@@ -88,21 +88,9 @@ export const PowerShortsSection = ({ onStorySelect, onClose }: PowerShortsSectio
     <div className="py-6">
       <div className="flex items-center justify-between mb-4">
         <h2 className="text-lg font-semibold text-foreground">Today's Power Shorts</h2>
-        <div className="flex items-center gap-2">
-          <Badge className="bg-primary text-primary-foreground rounded-full px-3 py-1">
-            3 Books
-          </Badge>
-          {onClose && (
-            <Button
-              variant="ghost"
-              size="sm"
-              onClick={onClose}
-              className="h-8 w-8 p-0 hover:bg-muted"
-            >
-              <X className="h-4 w-4 text-muted-foreground" />
-            </Button>
-          )}
-        </div>
+        <Badge className="bg-primary text-primary-foreground rounded-full px-3 py-1">
+          3 Books
+        </Badge>
       </div>
       
       <div className="flex gap-4 overflow-x-auto pb-2">

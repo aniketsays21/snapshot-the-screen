@@ -39,12 +39,9 @@ const Index = ({ actionPlans, setActionPlans, onNavigateToPlans }: IndexProps) =
       <AppHeader />
 
       <div className="px-4 pb-20">
-        {showPowerShorts && (
-          <PowerShortsSection 
-            onStorySelect={setSelectedStory} 
-            onClose={() => setShowPowerShorts(false)}
-          />
-        )}
+        <PowerShortsSection 
+          onStorySelect={setSelectedStory} 
+        />
         <AuthorsSection onAuthorSelect={setSelectedAuthor} />
         <ActionPlansSection 
           actionPlans={actionPlans}
