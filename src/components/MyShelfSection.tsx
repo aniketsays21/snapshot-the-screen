@@ -1,7 +1,7 @@
 import { Button } from "@/components/ui/button";
 import { MessageSquare, Zap, FileText } from "lucide-react";
 
-export const MyShelfSection = () => {
+export const MyShelfSection = ({ onAddToActionPlan }: { onAddToActionPlan?: () => void }) => {
   const shelfItems = [
     {
       id: "1",
@@ -50,6 +50,7 @@ export const MyShelfSection = () => {
                   variant="default" 
                   size="sm" 
                   className="bg-primary hover:bg-primary/90 text-primary-foreground text-xs mr-2"
+                  onClick={onAddToActionPlan}
                 >
                   Add to Action Plan
                 </Button>

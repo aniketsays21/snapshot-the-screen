@@ -31,6 +31,7 @@ const Index = ({ actionPlans, setActionPlans, onNavigateToPlans }: IndexProps) =
   const [selectedAuthor, setSelectedAuthor] = useState<any>(null);
   const [showActionPlanCreator, setShowActionPlanCreator] = useState(false);
   const [actionPlanData, setActionPlanData] = useState<any>(null);
+  const [actionPlanStep, setActionPlanStep] = useState(1);
 
   return (
     <div className="min-h-screen bg-background max-w-md mx-auto">
@@ -41,10 +42,21 @@ const Index = ({ actionPlans, setActionPlans, onNavigateToPlans }: IndexProps) =
         <AuthorsSection onAuthorSelect={setSelectedAuthor} />
         <ActionPlansSection 
           actionPlans={actionPlans}
-          onNewPlan={() => setShowActionPlanCreator(true)}
+          onNewPlan={() => {
+            setActionPlanStep(1);
+            setShowActionPlanCreator(true);
+          }}
+          onEditSchedule={(plan) => {
+            setActionPlanData(plan);
+            setActionPlanStep(3);
+            setShowActionPlanCreator(true);
+          }}
           onSeeAll={onNavigateToPlans}
         />
-        <MyShelfSection />
+        <MyShelfSection onAddToActionPlan={() => {
+          setActionPlanStep(3);
+          setShowActionPlanCreator(true);
+        }} />
       </div>
 
       <BottomNavigation onNavigateToPlans={onNavigateToPlans} />
@@ -79,13 +91,16 @@ const Index = ({ actionPlans, setActionPlans, onNavigateToPlans }: IndexProps) =
           onClose={() => {
             setShowActionPlanCreator(false);
             setActionPlanData(null);
+            setActionPlanStep(1);
           }}
           onCreatePlan={(plan) => {
             setActionPlans([...actionPlans, plan]);
             setShowActionPlanCreator(false);
             setActionPlanData(null);
+            setActionPlanStep(1);
           }}
           initialData={actionPlanData}
+          initialStep={actionPlanStep}
         />
       )}
     </div>

@@ -17,10 +17,11 @@ interface ActionPlan {
 interface ActionPlansSectionProps {
   actionPlans: ActionPlan[];
   onNewPlan: () => void;
+  onEditSchedule: (plan: ActionPlan) => void;
   onSeeAll?: () => void;
 }
 
-export const ActionPlansSection = ({ actionPlans, onNewPlan, onSeeAll }: ActionPlansSectionProps) => {
+export const ActionPlansSection = ({ actionPlans, onNewPlan, onEditSchedule, onSeeAll }: ActionPlansSectionProps) => {
   return (
     <div className="py-6">
       <div className="flex items-center justify-between mb-4">
@@ -64,7 +65,12 @@ export const ActionPlansSection = ({ actionPlans, onNewPlan, onSeeAll }: ActionP
               >
                 {plan.status}
               </Badge>
-              <Button variant="ghost" size="sm" className="text-primary text-xs">
+              <Button 
+                variant="ghost" 
+                size="sm" 
+                className="text-primary text-xs"
+                onClick={() => onEditSchedule(plan)}
+              >
                 {plan.status === "Draft" ? "Set Schedule" : "Edit Schedule"}
               </Button>
             </div>

@@ -19,9 +19,10 @@ interface ActionPlanCreatorProps {
   onClose: () => void;
   onCreatePlan: (plan: any) => void;
   initialData?: { book?: string; author?: string; chapter?: string };
+  initialStep?: number;
 }
 
-export const ActionPlanCreator = ({ onClose, onCreatePlan, initialData }: ActionPlanCreatorProps) => {
+export const ActionPlanCreator = ({ onClose, onCreatePlan, initialData, initialStep = 1 }: ActionPlanCreatorProps) => {
   const books = [
     {
       id: "atomic-habits",
@@ -59,7 +60,7 @@ export const ActionPlanCreator = ({ onClose, onCreatePlan, initialData }: Action
     }
   ];
 
-  const [currentStep, setCurrentStep] = useState(1);
+  const [currentStep, setCurrentStep] = useState(initialStep);
   const [selectedBook, setSelectedBook] = useState<any>(
     initialData?.book ? books.find(b => b.title === initialData.book) : null
   );

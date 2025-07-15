@@ -23,6 +23,8 @@ interface PlansProps {
 
 const Plans = ({ actionPlans, setActionPlans, onBack }: PlansProps) => {
   const [showActionPlanCreator, setShowActionPlanCreator] = useState(false);
+  const [actionPlanData, setActionPlanData] = useState<any>(null);
+  const [actionPlanStep, setActionPlanStep] = useState(1);
 
   return (
     <div className="min-h-screen bg-background max-w-md mx-auto">
@@ -40,18 +42,34 @@ const Plans = ({ actionPlans, setActionPlans, onBack }: PlansProps) => {
       <div className="px-4 pb-20">
         <ActionPlansSection 
           actionPlans={actionPlans}
-          onNewPlan={() => setShowActionPlanCreator(true)}
+          onNewPlan={() => {
+            setActionPlanStep(1);
+            setShowActionPlanCreator(true);
+          }}
+          onEditSchedule={(plan) => {
+            setActionPlanData(plan);
+            setActionPlanStep(3);
+            setShowActionPlanCreator(true);
+          }}
         />
       </div>
 
       {/* Action Plan Creator */}
       {showActionPlanCreator && (
         <ActionPlanCreator
-          onClose={() => setShowActionPlanCreator(false)}
+          onClose={() => {
+            setShowActionPlanCreator(false);
+            setActionPlanData(null);
+            setActionPlanStep(1);
+          }}
           onCreatePlan={(plan) => {
             setActionPlans([...actionPlans, plan]);
             setShowActionPlanCreator(false);
+            setActionPlanData(null);
+            setActionPlanStep(1);
           }}
+          initialData={actionPlanData}
+          initialStep={actionPlanStep}
         />
       )}
     </div>
