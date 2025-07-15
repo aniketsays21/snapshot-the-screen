@@ -1,14 +1,17 @@
 import { Badge } from "@/components/ui/badge";
 import { StoryPreview } from "@/components/StoryPreview";
+import { X } from "lucide-react";
+import { Button } from "@/components/ui/button";
 import jamesClearImg from "@/assets/james-clear.jpg";
 import breneBrownImg from "@/assets/brene-brown.jpg";
 import timFerrissImg from "@/assets/tim-ferriss.jpg";
 
 interface PowerShortsSectionProps {
   onStorySelect: (book: any) => void;
+  onClose?: () => void;
 }
 
-export const PowerShortsSection = ({ onStorySelect }: PowerShortsSectionProps) => {
+export const PowerShortsSection = ({ onStorySelect, onClose }: PowerShortsSectionProps) => {
   const books = [
     {
       id: "atomic-habits",
@@ -85,9 +88,21 @@ export const PowerShortsSection = ({ onStorySelect }: PowerShortsSectionProps) =
     <div className="py-6">
       <div className="flex items-center justify-between mb-4">
         <h2 className="text-lg font-semibold text-foreground">Today's Power Shorts</h2>
-        <Badge className="bg-primary text-primary-foreground rounded-full px-3 py-1">
-          3 Books
-        </Badge>
+        <div className="flex items-center gap-2">
+          <Badge className="bg-primary text-primary-foreground rounded-full px-3 py-1">
+            3 Books
+          </Badge>
+          {onClose && (
+            <Button
+              variant="ghost"
+              size="sm"
+              onClick={onClose}
+              className="h-8 w-8 p-0 hover:bg-muted"
+            >
+              <X className="h-4 w-4 text-muted-foreground" />
+            </Button>
+          )}
+        </div>
       </div>
       
       <div className="flex gap-4 overflow-x-auto pb-2">
