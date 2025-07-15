@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { ArrowLeft, Plus, Bookmark, Send } from "lucide-react";
+import { ArrowLeft, MoreVertical, Send, Paperclip, Mic } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useToast } from "@/hooks/use-toast";
@@ -109,69 +109,98 @@ export const AuthorChat = ({ author, onClose, onAddToPlan }: AuthorChatProps) =>
   return (
     <div className="fixed inset-0 bg-background z-50 flex flex-col">
       {/* Header */}
-      <div className="bg-gradient-to-r from-primary via-purple-600 to-blue-600 px-4 py-4 text-white">
-        <div className="flex items-center justify-between">
-          <div className="flex items-center gap-3">
-            <Button variant="ghost" size="sm" onClick={onClose} className="text-white hover:bg-white/20">
-              <ArrowLeft className="w-5 h-5" />
-            </Button>
+      <div className="bg-white border-b px-4 py-3 flex items-center justify-between">
+        <div className="flex items-center gap-3">
+          <Button variant="ghost" size="sm" onClick={onClose}>
+            <ArrowLeft className="w-5 h-5 text-gray-600" />
+          </Button>
+          <img 
+            src={author.image} 
+            alt={author.name} 
+            className="w-10 h-10 rounded-full object-cover"
+          />
+          <div>
+            <h1 className="font-semibold text-gray-900">{author.name}</h1>
+            <p className="text-xs text-gray-500">Author of "{author.book}"</p>
+          </div>
+        </div>
+        <div className="flex items-center gap-2">
+          <Button variant="ghost" size="sm">
+            <MoreVertical className="w-5 h-5 text-gray-600" />
+          </Button>
+        </div>
+      </div>
+
+      {/* Welcome Message */}
+      <div className="p-4 bg-gray-50 border-b">
+        <div className="flex flex-col items-center text-center">
+          <div className="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mb-3">
             <img 
               src={author.image} 
               alt={author.name} 
-              className="w-8 h-8 rounded-full object-cover"
+              className="w-12 h-12 rounded-full object-cover"
             />
-            <div>
-              <h1 className="font-semibold">{author.name}</h1>
-              <p className="text-xs text-white/80">Online now</p>
-            </div>
           </div>
-          <div className="flex items-center gap-2">
-            <Button variant="ghost" size="sm" onClick={saveToActionPlan} className="text-white hover:bg-white/20">
-              <Plus className="w-4 h-4" />
-            </Button>
-            <Button variant="ghost" size="sm" onClick={saveToShelf} className="text-white hover:bg-white/20">
-              <Bookmark className="w-4 h-4" />
-            </Button>
-          </div>
+          <p className="text-sm text-gray-700 mb-2">Welcome to your chat with {author.name}</p>
+          <p className="text-xs text-gray-500">
+            Ask about habits, productivity, or specific concepts from {author.book}
+          </p>
         </div>
       </div>
 
       {/* Messages */}
-      <div className="flex-1 overflow-y-auto p-4 space-y-4">
-        {messages.map((message) => (
-          <div
-            key={message.id}
-            className={`flex ${message.isAuthor ? 'justify-start' : 'justify-end'}`}
-          >
-            <div
-              className={`max-w-xs lg:max-w-md px-4 py-2 rounded-2xl ${
-                message.isAuthor
-                  ? 'bg-muted text-foreground'
-                  : 'bg-primary text-primary-foreground'
-              }`}
-            >
-              <p className="text-sm">{message.text}</p>
-              <p className={`text-xs mt-1 ${
-                message.isAuthor ? 'text-muted-foreground' : 'text-primary-foreground/70'
-              }`}>
-                {message.timestamp.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
-              </p>
+      <div className="flex-1 overflow-y-auto p-4 space-y-4 bg-gray-50">
+        {messages.map((message, index) => (
+          <div key={message.id}>
+            {index === 0 && (
+              <div className="text-center text-xs text-gray-500 mb-4">
+                Today, {message.timestamp.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+              </div>
+            )}
+            <div className={`flex ${message.isAuthor ? 'justify-start' : 'justify-end'} mb-2`}>
+              {message.isAuthor && (
+                <img 
+                  src={author.image} 
+                  alt={author.name} 
+                  className="w-8 h-8 rounded-full object-cover mr-2 mt-1"
+                />
+              )}
+              <div
+                className={`max-w-xs lg:max-w-md px-4 py-3 rounded-2xl ${
+                  message.isAuthor
+                    ? 'bg-white text-gray-800 border'
+                    : 'bg-blue-500 text-white'
+                }`}
+              >
+                <p className="text-sm">{message.text}</p>
+                <p className={`text-xs mt-1 ${
+                  message.isAuthor ? 'text-gray-500' : 'text-white/70'
+                }`}>
+                  {message.timestamp.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+                </p>
+              </div>
             </div>
           </div>
         ))}
       </div>
 
       {/* Input */}
-      <div className="p-4 border-t bg-background">
+      <div className="p-4 border-t bg-white">
         <div className="flex items-center gap-2">
+          <Button variant="ghost" size="sm">
+            <Paperclip className="w-5 h-5 text-gray-500" />
+          </Button>
           <Input
             value={newMessage}
             onChange={(e) => setNewMessage(e.target.value)}
-            placeholder={`Message ${author.name}...`}
+            placeholder="Type your message..."
             onKeyPress={(e) => e.key === 'Enter' && sendMessage()}
-            className="flex-1"
+            className="flex-1 border-gray-300 rounded-full"
           />
-          <Button onClick={sendMessage} size="sm" className="bg-primary hover:bg-primary/90">
+          <Button variant="ghost" size="sm">
+            <Mic className="w-5 h-5 text-gray-500" />
+          </Button>
+          <Button onClick={sendMessage} size="sm" className="bg-blue-500 hover:bg-blue-600 text-white rounded-full">
             <Send className="w-4 h-4" />
           </Button>
         </div>
