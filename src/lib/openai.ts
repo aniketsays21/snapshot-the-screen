@@ -162,8 +162,17 @@ export async function getAuthorResponse(authorName: string, userMessage: string,
       throw new Error(`No personality defined for ${authorName}`);
     }
 
+    const enhancedSystemPrompt = `${systemPrompt}
+
+CRITICAL RESPONSE GUIDELINES:
+- Keep responses SHORT and CONCISE (2-3 sentences maximum)
+- Be direct and actionable
+- Focus on ONE key insight or tip per response
+- End with a specific question to keep conversation flowing
+- Avoid long explanations - be punchy and memorable
+- Use your authentic voice but be brief`;
     const messages = [
-      { role: "system", content: systemPrompt },
+      { role: "system", content: enhancedSystemPrompt },
       ...conversationHistory.map(msg => ({
         role: msg.isAuthor ? "assistant" : "user",
         content: msg.text
@@ -174,7 +183,7 @@ export async function getAuthorResponse(authorName: string, userMessage: string,
     const response = await openai.chat.completions.create({
       model: "gpt-4",
       messages: messages as any,
-      max_tokens: 300,
+      max_tokens: 150,
       temperature: 0.7,
     });
 
@@ -183,4 +192,63 @@ export async function getAuthorResponse(authorName: string, userMessage: string,
     console.error('OpenAI API Error:', error);
     return "I'm having trouble connecting right now. Please try again in a moment.";
   }
+}
+
+export async function generateActionPlanSuggestions(authorName: string, conversationContext: string) {
+  try {
+    const prompt = `Based on this conversation with ${authorName}, generate 3 specific, actionable plan suggestions that the user could implement. Each suggestion should be:
+    - Specific and actionable
+    - Based on ${authorName}'s methodology
+    - Something that can be turned into a habit or routine
+    - 1-2 sentences long
+
+    Conversation context: "${conversationContext}"
+
+    Format as JSON array:
+    [
+      {
+        "title": "Plan Title",
+        "description": "Brief description of what this plan involves",
+        "author": "${authorName}",
+        "book": "Relevant Book Title"
+      }
+    ]`;
+
+    const response = await openai.chat.completions.create({
+      model: "gpt-4",
+      messages: [{ role: "user", content: prompt }],
+      max_tokens: 400,
+      temperature: 0.7,
+    });
+
+    const content = response.choices[0]?.message?.content;
+    if (!content) return [];
+
+    try {
+      return JSON.parse(content);
+    } catch {
+      // Fallback suggestions if JSON parsing fails
+      return [
+        {
+          title: "Daily Practice Routine",
+          description: `Implement ${authorName}'s key principles in a daily routine`,
+          author: authorName,
+          book: getAuthorBook(authorName)
+        }
+      ];
+    }
+  } catch (error) {
+    console.error('Error generating action plan suggestions:', error);
+    return [];
+  }
+}
+
+function getAuthorBook(authorName: string): string {
+  const books = {
+    "James Clear": "Atomic Habits",
+    "Tim Ferriss": "4-Hour Workweek", 
+    "Brené Brown": "Daring Greatly",
+    "Carol Dweck": "Growth Mindset"
+  };
+  return books[authorName as keyof typeof books] || "Unknown";
 }

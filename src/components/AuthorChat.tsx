@@ -3,7 +3,7 @@ import { ArrowLeft, MoreVertical, Send, Paperclip, Mic, Plus, Bookmark } from "l
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useToast } from "@/hooks/use-toast";
-import { getAuthorResponse } from "@/lib/openai";
+import { getAuthorResponse, generateActionPlanSuggestions } from "@/lib/openai";
 
 interface Author {
   name: string;
@@ -18,7 +18,7 @@ interface Author {
 interface AuthorChatProps {
   author: Author;
   onClose: () => void;
-  onAddToPlan: (data: { author: string; book: string }) => void;
+  onAddToPlan: (data: { author: string; book: string; suggestions?: any[] }) => void;
 }
 
 interface Message {
@@ -39,6 +39,7 @@ export const AuthorChat = ({ author, onClose, onAddToPlan }: AuthorChatProps) =>
   ]);
   const [newMessage, setNewMessage] = useState("");
   const [isLoading, setIsLoading] = useState(false);
+  const [isGeneratingSuggestions, setIsGeneratingSuggestions] = useState(false);
   const { toast } = useToast();
 
   const sendMessage = async () => {
@@ -82,11 +83,29 @@ export const AuthorChat = ({ author, onClose, onAddToPlan }: AuthorChatProps) =>
     }
   };
 
-  const saveToActionPlan = () => {
-    onAddToPlan({ 
-      author: author.name, 
-      book: author.book 
-    });
+  const saveToActionPlan = async () => {
+    setIsGeneratingSuggestions(true);
+    
+    try {
+      // Get the last few messages for context
+      const recentMessages = messages.slice(-4).map(m => m.text).join(" ");
+      const suggestions = await generateActionPlanSuggestions(author.name, recentMessages);
+      
+      onAddToPlan({ 
+        author: author.name, 
+        book: author.book,
+        suggestions: suggestions
+      });
+    } catch (error) {
+      console.error('Error generating suggestions:', error);
+      // Fallback to basic action plan
+      onAddToPlan({ 
+        author: author.name, 
+        book: author.book 
+      });
+    } finally {
+      setIsGeneratingSuggestions(false);
+    }
   };
 
   const saveToShelf = () => {
@@ -179,9 +198,19 @@ export const AuthorChat = ({ author, onClose, onAddToPlan }: AuthorChatProps) =>
                   variant="outline" 
                   size="sm"
                   className="hover-scale border-blue-500 text-blue-600 hover:bg-blue-50"
+                  disabled={isGeneratingSuggestions}
                 >
-                  <Plus className="w-3 h-3 mr-1" />
-                  Add to Action Plan
+                  {isGeneratingSuggestions ? (
+                    <>
+                      <div className="w-3 h-3 border border-blue-500 border-t-transparent rounded-full animate-spin mr-1" />
+                      Generating...
+                    </>
+                  ) : (
+                    <>
+                      <Plus className="w-3 h-3 mr-1" />
+                      Add to Action Plan
+                    </>
+                  )}
                 </Button>
                 <Button 
                   onClick={saveToShelf}

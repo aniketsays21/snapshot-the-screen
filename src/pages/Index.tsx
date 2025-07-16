@@ -85,6 +85,7 @@ const Index = ({ actionPlans, setActionPlans, onNavigateToPlans }: IndexProps) =
           onAddToPlan={(data) => {
             setActionPlanData(data);
             setShowActionPlanCreator(true);
+            setSelectedAuthor(null);
           }}
         />
       )}
