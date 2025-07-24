@@ -29,7 +29,6 @@ interface IndexProps {
 const Index = ({ actionPlans, setActionPlans, onNavigateToPlans }: IndexProps) => {
   const [selectedStory, setSelectedStory] = useState<any>(null);
   const [selectedAuthor, setSelectedAuthor] = useState<any>(null);
-  const [showPowerShorts, setShowPowerShorts] = useState(true);
   const [showActionPlanCreator, setShowActionPlanCreator] = useState(false);
   const [actionPlanData, setActionPlanData] = useState<any>(null);
   const [actionPlanStep, setActionPlanStep] = useState(1);
@@ -39,9 +38,7 @@ const Index = ({ actionPlans, setActionPlans, onNavigateToPlans }: IndexProps) =
       <AppHeader />
 
       <div className="px-4 pb-20">
-        <PowerShortsSection 
-          onStorySelect={setSelectedStory} 
-        />
+        <PowerShortsSection onStorySelect={setSelectedStory} />
         <AuthorsSection onAuthorSelect={setSelectedAuthor} />
         <ActionPlansSection 
           actionPlans={actionPlans}
@@ -71,7 +68,6 @@ const Index = ({ actionPlans, setActionPlans, onNavigateToPlans }: IndexProps) =
           onClose={() => setSelectedStory(null)}
           onAddToPlan={(data) => {
             setActionPlanData(data);
-            setSelectedStory(null);
             setShowActionPlanCreator(true);
           }}
         />
@@ -85,7 +81,6 @@ const Index = ({ actionPlans, setActionPlans, onNavigateToPlans }: IndexProps) =
           onAddToPlan={(data) => {
             setActionPlanData(data);
             setShowActionPlanCreator(true);
-            setSelectedAuthor(null);
           }}
         />
       )}

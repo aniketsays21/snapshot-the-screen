@@ -18,7 +18,7 @@ import carolDweckImg from "@/assets/carol-dweck.jpg";
 interface ActionPlanCreatorProps {
   onClose: () => void;
   onCreatePlan: (plan: any) => void;
-  initialData?: { book?: string; author?: string; chapter?: string; suggestions?: any[] };
+  initialData?: { book?: string; author?: string; chapter?: string };
   initialStep?: number;
 }
 
@@ -67,7 +67,6 @@ export const ActionPlanCreator = ({ onClose, onCreatePlan, initialData, initialS
   const [selectedChapter, setSelectedChapter] = useState<any>(
     initialData?.chapter ? { title: initialData.chapter } : null
   );
-  const [selectedSuggestion, setSelectedSuggestion] = useState<any>(null);
   const [customTopic, setCustomTopic] = useState("");
   const [schedule, setSchedule] = useState({
     frequency: "",
@@ -109,7 +108,7 @@ export const ActionPlanCreator = ({ onClose, onCreatePlan, initialData, initialS
 
   const canProceed = () => {
     switch (currentStep) {
-      case 1: return selectedBook || selectedSuggestion;
+      case 1: return selectedBook;
       case 2: return selectedChapter || customTopic;
       case 3: return schedule.frequency && schedule.duration;
       case 4: return true;
@@ -121,63 +120,6 @@ export const ActionPlanCreator = ({ onClose, onCreatePlan, initialData, initialS
   const renderStep = () => {
     switch (currentStep) {
       case 1:
-        // If we have suggestions from author chat, show them first
-        if (initialData?.suggestions && initialData.suggestions.length > 0) {
-          return (
-            <div className="space-y-4">
-              <h3 className="text-lg font-semibold text-foreground">Suggested Action Plans</h3>
-              <p className="text-sm text-muted-foreground">
-                Based on your conversation with {initialData.author}, here are some personalized action plans:
-              </p>
-              
-              <div className="space-y-3">
-                {initialData.suggestions.map((suggestion, index) => (
-                  <Card 
-                    key={index}
-                    className={cn(
-                      "p-4 cursor-pointer border-2 transition-all",
-                      selectedSuggestion?.title === suggestion.title ? "border-primary bg-primary/5" : "border-border hover:border-primary/50"
-                    )}
-                    onClick={() => {
-                      setSelectedSuggestion(suggestion);
-                      setCustomTopic(suggestion.title);
-                      // Auto-select the author's book
-                      const authorBook = books.find(b => b.author === suggestion.author);
-                      if (authorBook) setSelectedBook(authorBook);
-                    }}
-                  >
-                    <div className="flex items-start gap-3">
-                      <div className="w-10 h-10 bg-primary/10 rounded-lg flex items-center justify-center">
-                        <Target className="w-5 h-5 text-primary" />
-                      </div>
-                      <div className="flex-1">
-                        <h4 className="font-medium text-foreground text-sm">{suggestion.title}</h4>
-                        <p className="text-xs text-muted-foreground mt-1">{suggestion.description}</p>
-                        <Badge className="mt-2 text-xs">From: {suggestion.book}</Badge>
-                      </div>
-                    </div>
-                  </Card>
-                ))}
-              </div>
-              
-              <div className="pt-4 border-t">
-                <Button 
-                  variant="outline" 
-                  className="w-full"
-                  onClick={() => {
-                    setSelectedSuggestion(null);
-                    setCustomTopic("");
-                    // Continue to book selection
-                  }}
-                >
-                  Or choose a book manually
-                </Button>
-              </div>
-            </div>
-          );
-        }
-        
-        // Default book selection
         return (
           <div className="space-y-4">
             <h3 className="text-lg font-semibold text-foreground">Choose a Book</h3>

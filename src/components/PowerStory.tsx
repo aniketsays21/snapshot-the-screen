@@ -32,7 +32,7 @@ export const PowerStory = ({ book, onClose, onAddToPlan }: PowerStoryProps) => {
   const nextChapter = () => {
     if (currentChapter < book.chapters.length - 1) {
       setCurrentChapter(currentChapter + 1);
-      setProgress(((currentChapter + 2) / book.chapters.length) * 100);
+      setProgress(((currentChapter + 1) / book.chapters.length) * 100);
     } else {
       onClose();
     }
@@ -41,7 +41,7 @@ export const PowerStory = ({ book, onClose, onAddToPlan }: PowerStoryProps) => {
   const prevChapter = () => {
     if (currentChapter > 0) {
       setCurrentChapter(currentChapter - 1);
-      setProgress((currentChapter / book.chapters.length) * 100);
+      setProgress(((currentChapter - 1) / book.chapters.length) * 100);
     }
   };
 

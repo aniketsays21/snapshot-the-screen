@@ -3,7 +3,6 @@ import { ArrowLeft, MoreVertical, Send, Paperclip, Mic, Plus, Bookmark } from "l
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useToast } from "@/hooks/use-toast";
-import { getAuthorResponse, generateActionPlanSuggestions } from "@/lib/openai";
 
 interface Author {
   name: string;
@@ -18,7 +17,7 @@ interface Author {
 interface AuthorChatProps {
   author: Author;
   onClose: () => void;
-  onAddToPlan: (data: { author: string; book: string; suggestions?: any[] }) => void;
+  onAddToPlan: (data: { author: string; book: string }) => void;
 }
 
 interface Message {
@@ -38,13 +37,10 @@ export const AuthorChat = ({ author, onClose, onAddToPlan }: AuthorChatProps) =>
     }
   ]);
   const [newMessage, setNewMessage] = useState("");
-  const [isLoading, setIsLoading] = useState(false);
-  const [isGeneratingSuggestions, setIsGeneratingSuggestions] = useState(false);
   const { toast } = useToast();
 
-  const sendMessage = async () => {
+  const sendMessage = () => {
     if (!newMessage.trim()) return;
-    if (isLoading) return;
 
     const userMessage: Message = {
       id: Date.now().toString(),
@@ -54,58 +50,53 @@ export const AuthorChat = ({ author, onClose, onAddToPlan }: AuthorChatProps) =>
     };
 
     setMessages(prev => [...prev, userMessage]);
-    const currentMessage = newMessage;
     setNewMessage("");
-    setIsLoading(true);
 
-    try {
-      // Get AI response using OpenAI
-      const response = await getAuthorResponse(author.name, currentMessage, messages);
-      
+    // Simulate author response after 2 seconds
+    setTimeout(() => {
       const authorResponse: Message = {
-        id: (Date.now() + Math.random()).toString(),
-        text: response,
+        id: (Date.now() + 1).toString(),
+        text: getAuthorResponse(newMessage, author.name),
         isAuthor: true,
         timestamp: new Date()
       };
       setMessages(prev => [...prev, authorResponse]);
-    } catch (error) {
-      console.error('Error getting author response:', error);
-      const errorResponse: Message = {
-        id: (Date.now() + Math.random()).toString(),
-        text: "I'm having some technical difficulties right now. Please try again in a moment.",
-        isAuthor: true,
-        timestamp: new Date()
-      };
-      setMessages(prev => [...prev, errorResponse]);
-    } finally {
-      setIsLoading(false);
-    }
+    }, 2000);
   };
 
-  const saveToActionPlan = async () => {
-    setIsGeneratingSuggestions(true);
-    
-    try {
-      // Get the last few messages for context
-      const recentMessages = messages.slice(-4).map(m => m.text).join(" ");
-      const suggestions = await generateActionPlanSuggestions(author.name, recentMessages);
-      
-      onAddToPlan({ 
-        author: author.name, 
-        book: author.book,
-        suggestions: suggestions
-      });
-    } catch (error) {
-      console.error('Error generating suggestions:', error);
-      // Fallback to basic action plan
-      onAddToPlan({ 
-        author: author.name, 
-        book: author.book 
-      });
-    } finally {
-      setIsGeneratingSuggestions(false);
-    }
+  const getAuthorResponse = (userMessage: string, authorName: string) => {
+    const responses = {
+      "James Clear": [
+        "That's a great question! The key is to focus on systems, not goals. Small improvements compound over time.",
+        "Remember, you don't rise to the level of your goals, you fall to the level of your systems.",
+        "Start with the 2-minute rule - make it so easy you can't say no."
+      ],
+      "Brené Brown": [
+        "Vulnerability is not weakness - it's our greatest measure of courage.",
+        "Shame cannot survive being spoken. It grows in silence and secrecy.",
+        "Connection is why we're here. We are hardwired to connect with others."
+      ],
+      "Tim Ferriss": [
+        "Focus on the 20% that produces 80% of your results.",
+        "Being busy is a form of laziness - lazy thinking and indiscriminate action.",
+        "What would this look like if it were easy?"
+      ],
+      "Carol Dweck": [
+        "The view you adopt for yourself profoundly affects the way you lead your life.",
+        "Becoming is better than being.",
+        "Challenges are opportunities to learn and grow."
+      ]
+    };
+
+    const authorResponses = responses[authorName as keyof typeof responses] || responses["James Clear"];
+    return authorResponses[Math.floor(Math.random() * authorResponses.length)];
+  };
+
+  const saveToActionPlan = () => {
+    onAddToPlan({ 
+      author: author.name, 
+      book: author.book 
+    });
   };
 
   const saveToShelf = () => {
@@ -198,19 +189,9 @@ export const AuthorChat = ({ author, onClose, onAddToPlan }: AuthorChatProps) =>
                   variant="outline" 
                   size="sm"
                   className="hover-scale border-blue-500 text-blue-600 hover:bg-blue-50"
-                  disabled={isGeneratingSuggestions}
                 >
-                  {isGeneratingSuggestions ? (
-                    <>
-                      <div className="w-3 h-3 border border-blue-500 border-t-transparent rounded-full animate-spin mr-1" />
-                      Generating...
-                    </>
-                  ) : (
-                    <>
-                      <Plus className="w-3 h-3 mr-1" />
-                      Add to Action Plan
-                    </>
-                  )}
+                  <Plus className="w-3 h-3 mr-1" />
+                  Add to Action Plan
                 </Button>
                 <Button 
                   onClick={saveToShelf}
@@ -237,24 +218,14 @@ export const AuthorChat = ({ author, onClose, onAddToPlan }: AuthorChatProps) =>
             value={newMessage}
             onChange={(e) => setNewMessage(e.target.value)}
             placeholder="Type your message..."
-            onKeyPress={(e) => e.key === 'Enter' && !isLoading && sendMessage()}
+            onKeyPress={(e) => e.key === 'Enter' && sendMessage()}
             className="flex-1 border-gray-300 rounded-full"
-            disabled={isLoading}
           />
           <Button variant="ghost" size="sm">
             <Mic className="w-5 h-5 text-gray-500" />
           </Button>
-          <Button 
-            onClick={sendMessage} 
-            size="sm" 
-            className="bg-blue-500 hover:bg-blue-600 text-white rounded-full"
-            disabled={isLoading}
-          >
-            {isLoading ? (
-              <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
-            ) : (
-              <Send className="w-4 h-4" />
-            )}
+          <Button onClick={sendMessage} size="sm" className="bg-blue-500 hover:bg-blue-600 text-white rounded-full">
+            <Send className="w-4 h-4" />
           </Button>
         </div>
       </div>

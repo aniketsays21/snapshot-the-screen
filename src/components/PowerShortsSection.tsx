@@ -1,17 +1,14 @@
 import { Badge } from "@/components/ui/badge";
 import { StoryPreview } from "@/components/StoryPreview";
-import { X } from "lucide-react";
-import { Button } from "@/components/ui/button";
 import jamesClearImg from "@/assets/james-clear.jpg";
 import breneBrownImg from "@/assets/brene-brown.jpg";
 import timFerrissImg from "@/assets/tim-ferriss.jpg";
 
 interface PowerShortsSectionProps {
   onStorySelect: (book: any) => void;
-  onClose?: () => void;
 }
 
-export const PowerShortsSection = ({ onStorySelect, onClose }: PowerShortsSectionProps) => {
+export const PowerShortsSection = ({ onStorySelect }: PowerShortsSectionProps) => {
   const books = [
     {
       id: "atomic-habits",
