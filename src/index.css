@@ -8,44 +8,64 @@ All colors MUST be HSL.
 
 @layer base {
   :root {
-    --background: 0 0% 98%;
-    --foreground: 222.2 84% 4.9%;
+    --background: 248 50% 98%;
+    --foreground: 235 25% 8%;
 
     --card: 0 0% 100%;
-    --card-foreground: 222.2 84% 4.9%;
+    --card-foreground: 235 25% 8%;
 
     --popover: 0 0% 100%;
-    --popover-foreground: 222.2 84% 4.9%;
+    --popover-foreground: 235 25% 8%;
 
-    --primary: 259 100% 65%;
+    /* Premium color system focused on chat */
+    --primary: 262 83% 58%;
     --primary-foreground: 0 0% 100%;
+    --primary-glow: 262 83% 68%;
+    --primary-soft: 262 30% 96%;
 
-    --secondary: 210 40% 96.1%;
-    --secondary-foreground: 222.2 47.4% 11.2%;
+    --secondary: 250 20% 94%;
+    --secondary-foreground: 235 25% 15%;
 
-    --muted: 210 40% 98%;
-    --muted-foreground: 215.4 16.3% 46.9%;
+    --muted: 250 20% 96%;
+    --muted-foreground: 240 8% 48%;
 
-    --accent: 210 40% 96.1%;
-    --accent-foreground: 222.2 47.4% 11.2%;
+    --accent: 262 30% 95%;
+    --accent-foreground: 262 83% 35%;
 
-    --destructive: 0 84.2% 60.2%;
-    --destructive-foreground: 210 40% 98%;
+    --destructive: 0 84% 60%;
+    --destructive-foreground: 0 0% 98%;
 
-    --border: 214.3 31.8% 91.4%;
-    --input: 214.3 31.8% 91.4%;
-    --ring: 222.2 84% 4.9%;
+    --border: 250 20% 90%;
+    --input: 250 20% 88%;
+    --ring: 262 83% 58%;
 
     --radius: 1rem;
 
-    /* App-specific colors */
-    --gradient-purple: linear-gradient(135deg, hsl(259 100% 65%), hsl(280 100% 70%));
-    --gradient-green: linear-gradient(135deg, hsl(142 76% 36%), hsl(158 64% 52%));
-    --gradient-header: linear-gradient(135deg, hsl(259 100% 65%), hsl(240 100% 70%));
+    /* Premium chat-focused design tokens */
+    --chat-bubble-user: 262 83% 58%;
+    --chat-bubble-author: 0 0% 100%;
+    --chat-background: 248 50% 98%;
+    --chat-border: 250 20% 85%;
     
-    --purple-card: 259 100% 65%;
-    --green-card: 142 76% 36%;
-    --online-status: 142 76% 36%;
+    /* Sophisticated gradients */
+    --gradient-primary: linear-gradient(135deg, hsl(262 83% 58%), hsl(280 80% 65%));
+    --gradient-hero: linear-gradient(135deg, hsl(262 83% 58%) 0%, hsl(280 80% 65%) 50%, hsl(240 100% 70%) 100%);
+    --gradient-card: linear-gradient(135deg, hsla(262 83% 58% / 0.05), hsla(280 80% 65% / 0.08));
+    --gradient-subtle: linear-gradient(180deg, hsl(248 50% 99%), hsl(250 20% 96%));
+    
+    /* Premium status colors */
+    --online-status: 142 76% 45%;
+    --active-chat: 262 83% 58%;
+    --notification: 20 90% 55%;
+    
+    /* Glass morphism effects */
+    --glass-bg: hsla(0 0% 100% / 0.8);
+    --glass-border: hsla(250 20% 90% / 0.3);
+    
+    /* Premium shadows */
+    --shadow-elegant: 0 8px 32px hsla(262 83% 58% / 0.12);
+    --shadow-card: 0 4px 16px hsla(235 25% 8% / 0.08);
+    --shadow-floating: 0 12px 40px hsla(262 83% 58% / 0.15);
 
     --sidebar-background: 0 0% 98%;
 
@@ -113,6 +133,82 @@ All colors MUST be HSL.
   }
 }
 
+/* Premium animations and effects */
+@layer components {
+  .premium-glass {
+    background: var(--glass-bg);
+    backdrop-filter: blur(20px);
+    border: 1px solid var(--glass-border);
+  }
+  
+  .chat-bubble-user {
+    background: var(--gradient-primary);
+    color: hsl(var(--primary-foreground));
+    border-radius: 1.25rem 1.25rem 0.25rem 1.25rem;
+  }
+  
+  .chat-bubble-author {
+    background: hsl(var(--chat-bubble-author));
+    color: hsl(var(--card-foreground));
+    border: 1px solid hsl(var(--chat-border));
+    border-radius: 1.25rem 1.25rem 1.25rem 0.25rem;
+    box-shadow: var(--shadow-card);
+  }
+  
+  .hero-gradient {
+    background: var(--gradient-hero);
+  }
+  
+  .card-gradient {
+    background: var(--gradient-card);
+  }
+  
+  .hover-lift {
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+  
+  .hover-lift:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-elegant);
+  }
+  
+  .typing-indicator {
+    animation: typing 1.4s infinite ease-in-out;
+  }
+  
+  .typing-indicator:nth-child(2) {
+    animation-delay: 0.2s;
+  }
+  
+  .typing-indicator:nth-child(3) {
+    animation-delay: 0.4s;
+  }
+  
+  @keyframes typing {
+    0%, 60%, 100% {
+      transform: translateY(0);
+      opacity: 0.4;
+    }
+    30% {
+      transform: translateY(-8px);
+      opacity: 1;
+    }
+  }
+  
+  .pulse-glow {
+    animation: pulse-glow 2s infinite;
+  }
+  
+  @keyframes pulse-glow {
+    0%, 100% {
+      box-shadow: 0 0 0 0 hsla(var(--online-status) / 0.7);
+    }
+    70% {
+      box-shadow: 0 0 0 8px hsla(var(--online-status) / 0);
+    }
+  }
+}
+
 /* Custom scrollbar styles */
 .scrollbar-hide {
   -ms-overflow-style: none;
@@ -121,4 +217,22 @@ All colors MUST be HSL.
 
 .scrollbar-hide::-webkit-scrollbar {
   display: none;
+}
+
+/* Premium scrollbar */
+.premium-scroll::-webkit-scrollbar {
+  width: 4px;
+}
+
+.premium-scroll::-webkit-scrollbar-track {
+  background: hsl(var(--muted));
+}
+
+.premium-scroll::-webkit-scrollbar-thumb {
+  background: hsl(var(--primary));
+  border-radius: 2px;
+}
+
+.premium-scroll::-webkit-scrollbar-thumb:hover {
+  background: hsl(var(--primary-glow));
 }

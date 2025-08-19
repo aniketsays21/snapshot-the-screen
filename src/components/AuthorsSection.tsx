@@ -49,41 +49,63 @@ export const AuthorsSection = ({ onAuthorSelect }: AuthorsSectionProps) => {
   ];
 
   return (
-    <div className="p-5">
-      <div className="mb-5">
-        <h2 className="text-lg font-bold text-foreground">Talk to Authors</h2>
-        <p className="text-sm text-muted-foreground">Get personalized advice from bestselling authors</p>
+    <div className="p-6">
+      <div className="mb-6">
+        <h2 className="text-xl font-bold text-foreground mb-2">Chat with World-Class Authors</h2>
+        <p className="text-sm text-muted-foreground">Get personalized insights and guidance from bestselling authors</p>
+        <div className="flex items-center gap-2 mt-3">
+          <div className="w-2 h-2 bg-online-status rounded-full pulse-glow"></div>
+          <span className="text-xs text-online-status font-medium">54 authors online now</span>
+        </div>
       </div>
       
       <div className="grid grid-cols-2 gap-4">
         {authors.map((author) => (
-          <div key={author.name} className="bg-card/50 rounded-xl p-4 border border-border/50 hover:border-primary/30 transition-all duration-200 hover-scale">
+          <div key={author.name} className="group bg-white rounded-2xl p-5 border border-white/20 hover-lift cursor-pointer" 
+               style={{ boxShadow: 'var(--shadow-card)' }}
+               onClick={() => onAuthorSelect(author)}>
             <div className="text-center">
-              <div className="relative mb-3">
+              <div className="relative mb-4">
                 <img 
                   src={author.image} 
                   alt={author.name} 
-                  className="w-14 h-14 rounded-full mx-auto object-cover ring-2 ring-primary/20"
+                  className="w-16 h-16 rounded-full mx-auto object-cover ring-3 ring-primary/20 group-hover:ring-primary/40 transition-all"
                 />
-                <div className="absolute -top-1 -right-1 w-4 h-4 bg-online-status rounded-full border-2 border-background animate-pulse"></div>
+                <div className="absolute -top-1 -right-1 w-5 h-5 bg-online-status rounded-full border-2 border-white pulse-glow"></div>
+                <div className="absolute -bottom-1 left-1/2 transform -translate-x-1/2">
+                  <div className="bg-primary text-white text-xs px-2 py-1 rounded-full font-medium">
+                    LIVE
+                  </div>
+                </div>
               </div>
-              <h3 className="font-semibold text-sm text-foreground mb-1">{author.name}</h3>
-              <p className="text-xs text-primary font-medium mb-1">{author.specialty}</p>
-              <p className="text-xs text-muted-foreground mb-2">{author.book}</p>
-              <div className="text-xs text-muted-foreground mb-3 space-y-1">
-                <p className="font-medium">{author.activeChatters} chatting now</p>
+              <h3 className="font-bold text-sm text-foreground mb-1">{author.name}</h3>
+              <p className="text-xs font-semibold text-primary mb-1">{author.specialty}</p>
+              <p className="text-xs text-muted-foreground mb-3 line-clamp-1">"{author.book}"</p>
+              
+              <div className="bg-primary-soft rounded-lg p-2 mb-4">
+                <div className="flex items-center justify-center gap-2 text-xs">
+                  <div className="w-1.5 h-1.5 bg-online-status rounded-full"></div>
+                  <span className="text-primary font-semibold">{author.activeChatters} chatting</span>
+                </div>
+                <p className="text-xs text-muted-foreground mt-1">{author.chatCount.toLocaleString()} total chats</p>
               </div>
+              
               <Button 
                 variant="default" 
                 size="sm" 
-                className="w-full bg-primary hover:bg-primary/90 text-primary-foreground rounded-lg h-8 text-xs font-medium"
-                onClick={() => onAuthorSelect(author)}
+                className="w-full bg-primary hover:bg-primary-glow text-primary-foreground rounded-xl h-9 text-xs font-semibold shadow-md group-hover:shadow-lg transition-all"
               >
                 Start Chat
               </Button>
             </div>
           </div>
         ))}
+      </div>
+      
+      <div className="mt-6 text-center">
+        <Button variant="outline" className="text-primary border-primary/30 hover:bg-primary/5 rounded-xl px-6">
+          Explore All Authors
+        </Button>
       </div>
     </div>
   );
