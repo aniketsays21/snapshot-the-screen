@@ -49,35 +49,39 @@ export const AuthorsSection = ({ onAuthorSelect }: AuthorsSectionProps) => {
   ];
 
   return (
-    <div className="py-6">
-      <h2 className="text-lg font-semibold text-foreground mb-4">Talk to Authors</h2>
+    <div className="p-5">
+      <div className="mb-5">
+        <h2 className="text-lg font-bold text-foreground">Talk to Authors</h2>
+        <p className="text-sm text-muted-foreground">Get personalized advice from bestselling authors</p>
+      </div>
       
       <div className="grid grid-cols-2 gap-4">
         {authors.map((author) => (
-          <div key={author.name} className="text-center">
-            <div className="relative mb-3">
-              <img 
-                src={author.image} 
-                alt={author.name} 
-                className="w-16 h-16 rounded-full mx-auto object-cover"
-              />
-              <div className="absolute -top-1 -right-1 w-4 h-4 bg-online-status rounded-full border-2 border-background"></div>
+          <div key={author.name} className="bg-card/50 rounded-xl p-4 border border-border/50 hover:border-primary/30 transition-all duration-200 hover-scale">
+            <div className="text-center">
+              <div className="relative mb-3">
+                <img 
+                  src={author.image} 
+                  alt={author.name} 
+                  className="w-14 h-14 rounded-full mx-auto object-cover ring-2 ring-primary/20"
+                />
+                <div className="absolute -top-1 -right-1 w-4 h-4 bg-online-status rounded-full border-2 border-background animate-pulse"></div>
+              </div>
+              <h3 className="font-semibold text-sm text-foreground mb-1">{author.name}</h3>
+              <p className="text-xs text-primary font-medium mb-1">{author.specialty}</p>
+              <p className="text-xs text-muted-foreground mb-2">{author.book}</p>
+              <div className="text-xs text-muted-foreground mb-3 space-y-1">
+                <p className="font-medium">{author.activeChatters} chatting now</p>
+              </div>
+              <Button 
+                variant="default" 
+                size="sm" 
+                className="w-full bg-primary hover:bg-primary/90 text-primary-foreground rounded-lg h-8 text-xs font-medium"
+                onClick={() => onAuthorSelect(author)}
+              >
+                Start Chat
+              </Button>
             </div>
-            <h3 className="font-medium text-sm text-foreground">{author.name}</h3>
-            <p className="text-xs text-muted-foreground">{author.specialty}</p>
-            <p className="text-xs text-muted-foreground mb-1">{author.book}</p>
-            <div className="text-xs text-muted-foreground mb-3">
-              <p>{author.chatCount.toLocaleString()} chats</p>
-              <p>{author.activeChatters} chatting now</p>
-            </div>
-            <Button 
-              variant="default" 
-              size="sm" 
-              className="w-full bg-primary hover:bg-primary/90 text-primary-foreground rounded-lg"
-              onClick={() => onAuthorSelect(author)}
-            >
-              Chat Now
-            </Button>
           </div>
         ))}
       </div>

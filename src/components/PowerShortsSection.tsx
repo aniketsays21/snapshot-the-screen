@@ -82,21 +82,25 @@ export const PowerShortsSection = ({ onStorySelect }: PowerShortsSectionProps) =
   ];
 
   return (
-    <div className="py-6">
-      <div className="flex items-center justify-between mb-4">
-        <h2 className="text-lg font-semibold text-foreground">Today's Power Shorts</h2>
-        <Badge className="bg-primary text-primary-foreground rounded-full px-3 py-1">
-          3 Books
+    <div className="p-5">
+      <div className="flex items-center justify-between mb-5">
+        <div>
+          <h2 className="text-lg font-bold text-foreground">Today's Power Shorts</h2>
+          <p className="text-sm text-muted-foreground">Quick insights from top books</p>
+        </div>
+        <Badge className="bg-primary/20 text-primary border-primary/30 rounded-full px-3 py-1.5 font-medium">
+          {books.length} Books
         </Badge>
       </div>
       
-      <div className="flex gap-4 overflow-x-auto pb-2">
+      <div className="flex gap-4 overflow-x-auto pb-4 scrollbar-hide">
         {books.map((book) => (
-          <StoryPreview
-            key={book.id}
-            book={book}
-            onClick={() => onStorySelect(book)}
-          />
+          <div key={book.id} className="animate-fade-in">
+            <StoryPreview
+              book={book}
+              onClick={() => onStorySelect(book)}
+            />
+          </div>
         ))}
       </div>
     </div>

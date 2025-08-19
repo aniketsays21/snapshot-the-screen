@@ -30,26 +30,29 @@ export const MyShelfSection = ({ onAddToActionPlan }: { onAddToActionPlan?: () =
   ];
 
   return (
-    <div className="py-6">
-      <div className="flex items-center justify-between mb-4">
-        <h2 className="text-lg font-semibold text-foreground">My Shelf</h2>
-        <span className="text-sm text-muted-foreground">24 items saved</span>
+    <div className="p-5">
+      <div className="flex items-center justify-between mb-5">
+        <div>
+          <h2 className="text-lg font-bold text-foreground">My Shelf</h2>
+          <p className="text-sm text-muted-foreground">Your saved insights and notes</p>
+        </div>
+        <span className="text-sm text-primary font-medium">24 items</span>
       </div>
 
       <div className="space-y-3">
         {shelfItems.map((item) => (
-          <div key={item.id} className="bg-card rounded-lg p-4 border">
+          <div key={item.id} className="bg-card/70 rounded-xl p-4 border border-border/50 hover:border-primary/30 transition-all duration-200">
             <div className="flex items-start gap-3">
-              <div className={`w-8 h-8 ${item.bgColor} rounded-lg flex items-center justify-center`}>
-                <item.icon className={`w-4 h-4 ${item.iconColor}`} />
+              <div className={`w-10 h-10 ${item.bgColor} rounded-xl flex items-center justify-center ring-2 ring-white/50`}>
+                <item.icon className={`w-5 h-5 ${item.iconColor}`} />
               </div>
               <div className="flex-1">
-                <h3 className="font-medium text-sm text-foreground">{item.title}</h3>
-                <p className="text-xs text-muted-foreground mb-2">{item.description}</p>
+                <h3 className="font-semibold text-sm text-foreground mb-1">{item.title}</h3>
+                <p className="text-xs text-muted-foreground mb-3">{item.description}</p>
                 <Button 
                   variant="default" 
                   size="sm" 
-                  className="bg-primary hover:bg-primary/90 text-primary-foreground text-xs mr-2"
+                  className="bg-primary hover:bg-primary/90 text-primary-foreground text-xs rounded-lg h-8 font-medium"
                   onClick={onAddToActionPlan}
                 >
                   Add to Action Plan
